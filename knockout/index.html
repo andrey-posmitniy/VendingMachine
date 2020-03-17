@@ -1,0 +1,66 @@
+<html>
+<head>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.5/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="styles.css" />
+<head>
+<body>
+
+<!-- ko with: pm.app.model -->
+	<div class="row">
+	  
+	  <div class="col-md-4">
+		<h5>Кошелек пользователя</h5>
+		<!-- ko foreach: userPurse -->
+		<button class="btn btn-primary userpurse-coin" data-bind="text: caption, click: $parent.replenishDeposit, visible: count() > 0"></button>
+		<!-- /ko -->
+	  </div>
+
+	  <div class="col-md-4">
+		<h5>Продукты для заказа</h5>
+		<!-- ko foreach: vmProducts -->
+		<button class="btn btn-primary product" data-bind="text: caption, click: $parent.issueProduct, attr: { disabled: !count() || price() > $parent.deposit() }"></button>
+		<!-- /ko -->
+	  </div>
+
+	  <div class="col-md-4">
+		<h5>Кошелек машины</h5>
+		<!-- ko foreach: vmPurse -->
+		<div class="btn btn-info disabled vmpurse-coin" data-bind="text: caption"></div>
+		<!-- /ko -->
+	  </div>
+
+	</div>
+	<div class="row">
+
+	  <div class="col-md-4">
+		<!-- ko if: deposit -->
+		<h5>Внесенная сумма</h5>
+		<div><span data-bind="text: deposit"></span> руб</div>
+		<button class="btn btn-primary getchange" data-bind="click: getChange">Получить сдачу</button>
+		<!-- /ko -->
+	  </div>
+
+	  <div class="col-md-4">
+		<!-- ko if: issuedProducts().length -->
+		<h5>Выданные продукты</h5>
+		<!-- ko foreach: issuedProducts -->
+		<div data-bind="text: $data"></div>
+		<!-- /ko -->
+		<!-- /ko -->
+	  </div>
+	  
+	  <div class="col-md-4" data-bind="text: pm.app.logger.message">
+	  </div>
+	</div>
+<!-- /ko -->
+
+</body>
+</html>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.1/knockout-min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script type="text/javascript" src="pm.logger.js"></script>
+<script type="text/javascript" src="pm.model.js"></script>
+<script type="text/javascript" src="pm.app.js"></script>
+<script>
+</script>
