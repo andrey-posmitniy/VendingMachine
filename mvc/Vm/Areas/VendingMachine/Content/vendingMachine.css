@@ -1,0 +1,18 @@
+﻿.row > div {
+  margin-top: 10px;
+  padding: 20px;
+  outline: 2px solid #ccc;
+  outline-offset: -10px;
+  -moz-outline-radius: 10px;
+  -webkit-outline-radius: 10px;
+}
+
+.userpurse-coin, .vmpurse-coin, .product {
+  margin-bottom: 5px;
+  float: left;
+  clear: both;
+}
+
+.vmpurse-coin {
+  cursor: default !important;
+}

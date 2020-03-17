@@ -1,0 +1,88 @@
+﻿@model Vm.Areas.VendingMachine.Models.VendingMachineModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Вендинговая машина";
+}
+@section styles{
+    @Styles.Render("~/bundles/vendingmachine-styles")
+}
+
+
+<div class="row">
+
+    <div class="col-md-4">
+        <h4>Кошелек пользователя</h4>
+        @foreach (var coin in Model.UserPurse)
+        {
+            if (coin.Count > 0)
+            {
+                using (Html.BeginForm("ReplenishDeposit", "VendingMachine", FormMethod.Post))
+                {
+                    <input type="hidden" name="coinValue" value="@coin.Value" />
+                    <button type="submit" class="btn btn-primary userpurse-coin">@coin.ToString()</button>
+                }
+            }
+        }
+    </div>
+
+    <div class="col-md-4">
+        <h4>Продукты для заказа</h4>
+        @foreach (var product in Model.VmProducts)
+        {
+            using (Html.BeginForm("IssueProduct", "VendingMachine", FormMethod.Post))
+            {
+                <input type="hidden" name="productId" value="@product.Id" />
+                <button @((product.Count < 1 || product.Price > Model.Deposit) ? "disabled" : "") class="btn btn-primary product">@product.ToString()</button>
+            }
+        }
+    </div>
+
+    <div class="col-md-4">
+        <h4>Кошелек машины</h4>
+        @foreach (var coin in Model.VmPurse)
+        {
+            <div class="btn btn-info disabled vmpurse-coin">@coin.ToString()</div>
+        }
+    </div>
+
+</div>
+<div class="row">
+
+    <div class="col-md-4">
+        @if (@Model.Deposit > 0)
+        {
+            <h4>Внесенная сумма</h4>
+            <div>@Model.Deposit руб</div>
+            using (Html.BeginForm("GetChange", "VendingMachine", FormMethod.Post))
+            {
+                <button class="btn btn-primary getchange">Получить сдачу</button>
+            }
+        }
+    </div>
+
+    <div class="col-md-4">
+        @if (Model.IssuedProducts.Count > 0)
+        {
+            <h4>Выданные продукты</h4>
+            foreach (var issuedProduct in Model.IssuedProducts)
+            {
+                 <div>@issuedProduct</div>
+            }
+        }
+    </div>
+
+    <div class="col-md-4">
+        @Model.Message
+    </div>
+</div>
+
+
+@section scripts{
+    <script>
+        var vm = vm || {};
+        vm.urls = vm.urls || {};
+        vm.urls.VendingMachine_VendingMachine_ReplenishDeposit = '@Url.Action("ReplenishDeposit")';
+        vm.urls.VendingMachine_VendingMachine_GetChange = '@Url.Action("GetChange")';
+        vm.urls.VendingMachine_VendingMachine_IssueProduct = '@Url.Action("IssueProduct")';
+    </script>
+}
